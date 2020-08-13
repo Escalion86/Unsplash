@@ -1,0 +1,76 @@
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.4s;
+    padding: 40px;
+    z-index: 99;
+    background:  #333;
+}
+
+header .logo {
+    position: relative;
+    display: flex;
+    font-weight: 700px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 2em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: 0.4s;
+}
+
+header ul {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header ul li {
+    position: relative;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header ul li a {
+    position: relative;
+    margin: 0 15px;
+    text-decoration: none;
+    color: #fff;
+    letter-spacing: 2px;
+    font-size: 24px;
+    font-weight: 500;
+    transition: 0.4s;
+}
+header ul li a.active {
+    color: #6B3FC4;
+}
+
+header.sticky {
+    padding: 6px 40px;
+    background: #fff;
+}
+
+header.sticky .logo {
+    padding: 3px 0;
+    color: #000;
+}
+
+header.sticky ul li a {
+    color: #000;
+}
+
+header.sticky ul li a:hover {
+    color: #6B3FC4;
+}
+
+header.sticky ul li a.active {
+    color: #6B3FC4;
+}
