@@ -7,7 +7,7 @@ const GeneralPage = () => {
     return (
         <section className="general">
             <h3>Home Page</h3>
-            <PhotoList />
+            {/* <PhotoList photosId={this.PaymentResponse.photosId} /> */}
         </section>
     );
 };

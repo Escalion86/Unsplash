@@ -1,9 +1,12 @@
 import React from 'react';
-import Unsplash from 'unsplash-js';
+import Unsplash, { toJson } from 'unsplash-js';
 import GeneralPage from './pages/general';
 import Header from './components/header';
+import AuthPage from './pages/auth';
 
 import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+
+import './App.css';
 
 // const Unsplash = require('unsplash-js').default;
 
@@ -13,40 +16,46 @@ const unsplash = new Unsplash({
   callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
 });
 
-// const authenticationUrl = unsplash.auth.getAuthenticationUrl([
-//   "public",
-//   "write_likes"
-// ]);
+    const authenticationUrl = unsplash.auth.getAuthenticationUrl([
+      "public",
+      "write_likes"
+    ]);
 
-//window.location.assign(authenticationUrl);
+   window.location.assign(authenticationUrl);
 
-const code = 'laJZLeDZhZq1jUOreY3Bx7vISjB6fYtzHK5iA4ZhPgc';
+const code = 'Sg1FeZLyyqk6_ogRy7AlaS0tAsPEoJIMOeH6IyDJ2hg';
 
 unsplash.auth.userAuthentication(code)
   .then(res => res.json())
   .then(json =>
     {
       unsplash.auth.setBearerToken(json.access_token);
-      //console.log(json);
+      console.log(json);
     })
 
 // Теперь можно сделать что-то от имени пользователя
 // Например, поставить лайк фотографии
 //unsplash.photos.likePhoto("kBJEJqWNtNY");
-unsplash.photos.getPhoto('AHtS75VG5vQ')
-.then(res => res.json())
-.then(json => {
-  console.log(json);
-})
+// unsplash.photos.getPhoto('AHtS75VG5vQ')
+// .then(toJson)
+// .then(json => {
+//   console.log(json);
+// })
 //});
 
-// unsplash.search.photos("dogs", 1, 10, { orientation: "portrait" })
-//   .then(request => {
-//     console.log(request)
-//   })
-  // .then(json => {
-  //   // Your code
-  // });
+const searchPhotos = (str) => {
+  unsplash.search.photos(str, 1)
+  .then(toJson)
+  .then(json => {
+    formArrPhotosId(json);
+  });
+}
+
+const formArrPhotosId = (json) => {
+  json.results.map((item) => {
+    return item.id;
+  });
+}
 
 const App = () => {
   return (
@@ -54,8 +63,9 @@ const App = () => {
       
       <Router>  
         <Route path="/" component={Header} />                
-        <Route exact path="/" component={GeneralPage} />        
-        <Route exact path="/about" component={AboutPage} />                         
+        <Route exact path="/" component={() => <GeneralPage photosId={searchPhotos("cats")} />} />        
+        <Route exact path="/about" component={AboutPage} />        
+        <Route exact path="/auth" component={AuthPage} />                 
       </Router>
     </section> 
   );
