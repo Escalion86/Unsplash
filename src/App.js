@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Unsplash, { toJson } from 'unsplash-js';
 import GeneralPage from './pages/general';
 import Header from './components/header';
@@ -8,30 +8,58 @@ import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 
 import './App.css';
 
-// const Unsplash = require('unsplash-js').default;
-
 const unsplash = new Unsplash({ 
   accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
   secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
-  callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
+  callbackUrl: "http://unsplash.escalion.ru"
 });
 
-    const authenticationUrl = unsplash.auth.getAuthenticationUrl([
-      "public",
-      "write_likes"
-    ]);
+const authenticationUrl = unsplash.auth.getAuthenticationUrl([
+  "public",
+  "write_likes"
+]);
 
-   window.location.assign(authenticationUrl);
+const code = window.location.search.split('code=')[1];
 
-const code = 'Sg1FeZLyyqk6_ogRy7AlaS0tAsPEoJIMOeH6IyDJ2hg';
+if (!code) {
+  window.location.assign(authenticationUrl);
+} else {
+  unsplash.auth.userAuthentication(code)
+    .then(res => res.json())
+    .then(json =>
+      {
+        localStorage.setItem("unsplash-authAC-code", json.access_token);
+        unsplash.auth.setBearerToken(json.access_token);
+        // Теперь можно сделать что-то от имени пользователя
+        // Например, поставить лайк фотографии
+        // unsplash.photos.likePhoto("kBJEJqWNtNY");
+      });
+}
 
-unsplash.auth.userAuthentication(code)
-  .then(res => res.json())
-  .then(json =>
-    {
-      unsplash.auth.setBearerToken(json.access_token);
-      console.log(json);
-    })
+//    window.location.assign(authenticationUrl);
+
+// if (localStorage.getItem("unsplash-authAC-code") === null) {
+//   const Unsplash = require('unsplash-js').default;
+//   const unsplash = new Unsplash({ 
+//     accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
+//     secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
+//     callbackUrl: "unsplash.escalion.ru"
+//   });
+//   const authenticationUrl = unsplash.auth.getAuthenticationUrl([
+//     "public",
+//     "write_likes"
+//   ]);
+// }
+
+// const code = 'Sg1FeZLyyqk6_ogRy7AlaS0tAsPEoJIMOeH6IyDJ2hg';
+
+// unsplash.auth.userAuthentication(code)
+//   .then(res => res.json())
+//   .then(json =>
+//     {
+//       unsplash.auth.setBearerToken(json.access_token);
+//       console.log(json);
+//     })
 
 // Теперь можно сделать что-то от имени пользователя
 // Например, поставить лайк фотографии
@@ -43,32 +71,44 @@ unsplash.auth.userAuthentication(code)
 // })
 //});
 
-const searchPhotos = (str) => {
-  unsplash.search.photos(str, 1)
-  .then(toJson)
-  .then(json => {
-    formArrPhotosId(json);
-  });
-}
+export default class App extends Component {
 
-const formArrPhotosId = (json) => {
-  json.results.map((item) => {
-    return item.id;
-  });
-}
+  state = {
+    photosId: []
+  }
 
-const App = () => {
-  return (
-    <section className="App">
-      
-      <Router>  
-        <Route path="/" component={Header} />                
-        <Route exact path="/" component={() => <GeneralPage photosId={searchPhotos("cats")} />} />        
-        <Route exact path="/about" component={AboutPage} />        
-        <Route exact path="/auth" component={AuthPage} />                 
-      </Router>
-    </section> 
-  );
+  searchPhotos = (str) => {
+    unsplash.search.photos(str, 1)
+    .then(toJson)
+    .then(json => {
+      console.log(json);
+      this.setState((state) => {
+        return {
+          photosId: this.formArrPhotosId(json)
+        }
+      })
+    });
+  }
+  
+  formArrPhotosId = (json) => {
+    return json.results.map((item) => {
+      return item.id;
+    });
+  }
+
+  render () {
+    this.searchPhotos("cats");
+    console.log(this.state.photosId);
+    return(
+      <section className="App">  
+        <Router>  
+          <Route path="/" component={Header} />                
+          <Route exact path="/" component={() => <GeneralPage photosId={this.state.photosId} />} />        
+          <Route exact path="/about" component={AboutPage} />        
+          <Route exact path="/auth" component={AuthPage} />                 
+        </Router>
+      </section> 
+  )}
 };
 
 const AboutPage = () => {
@@ -76,5 +116,3 @@ const AboutPage = () => {
     <h3>About Page</h3>
   );
 };
-
-export default App;

@@ -6,13 +6,19 @@ import './photoList.css';
 
 export default class PhotoList extends Component {
 
-	photosId = this.props.photosId;
-
-	photos = this.photosId.map((photoId) => {
-		return <PhotoCard photoId={photoId} />
-	})
+	photos = null;
 
 	render() {
+		const {photosId} = this.props;	
+		
+		console.log(photosId);
+		if (typeof photosId != "undefined" && photosId.length !== 0) {
+			this.photos = this.props.photosId.map((photoId) => {
+				return <PhotoCard key={photoId} photoId={photoId} />
+			})
+		}
+		console.log(this.photos);
+
 		return (
 			<div className="container">
 				<Masonry

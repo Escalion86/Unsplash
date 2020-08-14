@@ -36,6 +36,7 @@ export default class Header extends Component {
 						)
 					})}			
 				</ul>
+				{/* <Link to={'/auth'}>Войти</Link> */}
 			</header>
 			</>
 		)

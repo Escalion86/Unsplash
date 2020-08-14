@@ -10,7 +10,7 @@ export default class PhotoCard extends Component {
 
 	
 	render() {
-		const num = Math.floor(Math.random()*2);
+	    const num = Math.floor(Math.random()*2);
 		return (
 			<div className='grid-item'>
 				<img src={this.images[num]} alt='' />
