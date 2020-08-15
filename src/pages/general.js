@@ -8,7 +8,7 @@ export default class GeneralPage extends Component {
         return (
             <section className="general">
                 <h3>Home Page</h3>
-                <PhotoList photosId={this.props.photosId} />
+                <PhotoList unsplash={this.props.unsplash} photosId={this.props.photosId} />
             </section>
         );
     }

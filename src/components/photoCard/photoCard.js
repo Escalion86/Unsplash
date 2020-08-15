@@ -3,17 +3,24 @@ import React, {Component} from 'react';
 import './photoCard.css';
 
 export default class PhotoCard extends Component {
+	state = {
+		photo: null,
+	};
 
-	images = ['https://images.unsplash.com/photo-1596287452759-7c86e9afc617?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1050&amp;q=80',
-			  'https://images.unsplash.com/photo-1597089177379-f26808f095d4?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjE0NzEwOH0'
-			];
-
-	
+	// url = 'https://api.unsplash.com/photos/';
+	componentDidMount() {
+		this.props.unsplash.photos.getPhoto(this.props.photoId)
+			.then((res) => {
+				this.setState({
+					photo: res.url
+				});
+			});
+	}
+			
 	render() {
-	    const num = Math.floor(Math.random()*2);
 		return (
 			<div className='grid-item'>
-				<img src={this.images[num]} alt='' />
+				<img src={this.state.photo} alt={'image:' + this.props.photoId} />
 			</div>
 		)
 	}

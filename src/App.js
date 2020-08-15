@@ -96,14 +96,16 @@ export default class App extends Component {
     });
   }
 
-  render () {
+  componentDidMount() {
     this.searchPhotos("cats");
-    console.log(this.state.photosId);
+  }
+
+  render () {   
     return(
       <section className="App">  
         <Router>  
           <Route path="/" component={Header} />                
-          <Route exact path="/" component={() => <GeneralPage photosId={this.state.photosId} />} />        
+          <Route exact path="/" component={() => <GeneralPage unsplash={unsplash} photosId={this.state.photosId} />} />        
           <Route exact path="/about" component={AboutPage} />        
           <Route exact path="/auth" component={AuthPage} />                 
         </Router>

@@ -11,13 +11,11 @@ export default class PhotoList extends Component {
 	render() {
 		const {photosId} = this.props;	
 		
-		console.log(photosId);
 		if (typeof photosId != "undefined" && photosId.length !== 0) {
 			this.photos = this.props.photosId.map((photoId) => {
-				return <PhotoCard key={photoId} photoId={photoId} />
+				return <PhotoCard key={photoId} unsplash={this.props.unsplash} photoId={photoId} />
 			})
 		}
-		console.log(this.photos);
 
 		return (
 			<div className="container">
