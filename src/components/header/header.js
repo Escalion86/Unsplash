@@ -24,7 +24,7 @@ export default class Header extends Component {
 		return (
 			<>
 			<header>
-				<a className="logo" href="/" alt="logo">UnSplash</a>
+				<a className="logo" href="/" alt="logo">Picso</a>
 				<ul>	
 					{this.menu.map((item, i) => {
 						return (
