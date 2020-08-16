@@ -11,7 +11,7 @@ import './App.css';
 const unsplash = new Unsplash({ 
   accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
   secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
-  callbackUrl: "http://unsplash.escalion.ru"
+  callbackUrl: "http://picso.escalion.ru"
 });
 
 const authenticationUrl = unsplash.auth.getAuthenticationUrl([
