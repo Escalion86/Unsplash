@@ -74,30 +74,33 @@ if (!code) {
 export default class App extends Component {
 
   state = {
-    photosId: []
+    photosUrl: [],
+    searchText: 'cats',
+    pagesLoad: 0
   }
 
-  searchPhotos = (str) => {
-    unsplash.search.photos(str, 1)
+  searchPhotos() {
+    unsplash.search.photos(this.state.searchText, (this.state.pagesLoad + 1))
     .then(toJson)
     .then(json => {
-      console.log(json);
       this.setState((state) => {
         return {
-          photosId: this.formArrPhotosId(json)
+          photosUrl: [...this.state.photosUrl, ...this.formArrPhotosUrl(json)],
+          pagesLoad: (this.state.pagesLoad + 1)
         }
-      })
+      });
+      console.log(this.state.photosUrl);
     });
   }
   
-  formArrPhotosId = (json) => {
+  formArrPhotosUrl = (json) => {
     return json.results.map((item) => {
-      return item.id;
+      return item.urls.regular;
     });
   }
 
   componentDidMount() {
-    this.searchPhotos("cats");
+    this.searchPhotos();
   }
 
   render () {   
@@ -105,7 +108,11 @@ export default class App extends Component {
       <section className="App">  
         <Router>  
           <Route path="/" component={Header} />                
-          <Route exact path="/" component={() => <GeneralPage unsplash={unsplash} photosId={this.state.photosId} />} />        
+          <Route exact path="/" component={() => 
+            <GeneralPage 
+              photosUrl={this.state.photosUrl}
+              searchPhotos={this.searchPhotos}
+            />} />        
           <Route exact path="/about" component={AboutPage} />        
           <Route exact path="/auth" component={AuthPage} />                 
         </Router>
