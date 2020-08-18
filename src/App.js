@@ -11,6 +11,7 @@ import './App.css';
 const unsplash = new Unsplash({ 
   accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
   secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
+  //callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
   callbackUrl: "http://picso.escalion.ru"
 });
 
@@ -19,22 +20,26 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
   "write_likes"
 ]);
 
-const code = window.location.search.split('code=')[1];
-
-if (!code) {
-  window.location.assign(authenticationUrl);
-} else {
-  unsplash.auth.userAuthentication(code)
-    .then(res => res.json())
-    .then(json =>
-      {
-        localStorage.setItem("unsplash-authAC-code", json.access_token);
-        unsplash.auth.setBearerToken(json.access_token);
-        // Теперь можно сделать что-то от имени пользователя
-        // Например, поставить лайк фотографии
-        // unsplash.photos.likePhoto("kBJEJqWNtNY");
-      });
-}
+//Проверяем токен и если он есть, то авторизируемся по нему напрямую
+//const token = localStorage.getItem("unsplash-authAC-code");
+//if (token) {
+//  unsplash.auth.setBearerToken(token);
+//если токена нет, то смотрим получен ли код авторизации и если код не получен, то получаем код переадресацией
+//} else {
+  const code = window.location.search.split('code=')[1];
+  //const code = "WErxFguoBXoYFYvA9EiAFi27LuNwCxaQhEzryVXuZjU";
+  if (!code) {
+    window.location.assign(authenticationUrl);
+  } else {
+    unsplash.auth.userAuthentication(code)
+      .then(res => res.json())
+      .then(json =>
+        {
+          localStorage.setItem("unsplash-authAC-code", json.access_token);
+          unsplash.auth.setBearerToken(json.access_token);
+        });
+  }
+//}
 
 //    window.location.assign(authenticationUrl);
 
@@ -72,30 +77,35 @@ if (!code) {
 //});
 
 export default class App extends Component {
-
+  
   state = {
-    photosUrl: [],
+    photos: [],
     searchText: 'cats',
-    pagesLoad: 0
+    pagesLoad: 0,
+    pagesLoading: false
   }
 
   searchPhotos() {
-    unsplash.search.photos(this.state.searchText, (this.state.pagesLoad + 1))
-    .then(toJson)
-    .then(json => {
-      this.setState((state) => {
-        return {
-          photosUrl: [...this.state.photosUrl, ...this.formArrPhotosUrl(json)],
-          pagesLoad: (this.state.pagesLoad + 1)
-        }
+    if (!this.state.pagesLoading) {
+      this.setState({pagesLoading: true});
+      unsplash.search.photos(this.state.searchText, (this.state.pagesLoad + 1))
+      .then(toJson)
+      .then(json => {
+        this.setState((state) => {
+          return {
+            photos: [...this.state.photos, ...this.formArrPhotos(json)],
+            pagesLoad: (this.state.pagesLoad + 1),
+            pagesLoading: false
+          }
+        });
       });
-      console.log(this.state.photosUrl);
-    });
+    }
   }
   
-  formArrPhotosUrl = (json) => {
+  formArrPhotos = (json) => {
+    console.log(json);
     return json.results.map((item) => {
-      return item.urls.regular;
+      return item;
     });
   }
 
@@ -103,15 +113,37 @@ export default class App extends Component {
     this.searchPhotos();
   }
 
+  setLike(id, status) {
+    unsplash.photos.likePhoto(id)
+      .then(res => {
+        if (res.ok) {
+          this.setState((state) => {
+            const newPhotos = this.state.photos.map((photo) => {
+              if (id === photo.id) {
+                photo.liked_by_user = status;
+              }
+              return photo;
+            });
+
+            return {
+              photos: newPhotos,
+            }
+          });
+        }
+      })
+  }
+
   render () {   
+    console.log('App render');
     return(
       <section className="App">  
         <Router>  
           <Route path="/" component={Header} />                
           <Route exact path="/" component={() => 
             <GeneralPage 
-              photosUrl={this.state.photosUrl}
-              searchPhotos={this.searchPhotos}
+              photos={this.state.photos}
+              searchPhotos={this.searchPhotos.bind(this)}
+              setLike={this.setLike.bind(this)}
             />} />        
           <Route exact path="/about" component={AboutPage} />        
           <Route exact path="/auth" component={AuthPage} />                 

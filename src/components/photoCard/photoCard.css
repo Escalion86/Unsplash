@@ -1,6 +1,110 @@
-.grid-item img {
+.grid-item {
+  position: relative;
+}
+
+.grid-item .photo {
   width: 100%;
   height: 100%;
   object-fit: contain; 
   object-position: center top;
+}
+
+.card-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid black;
+  background-color: #333;
+  opacity: 0;
+  transition: 0.4s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-desc {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 16px;
+}
+
+.card-background:hover {
+  opacity: 0.9;
+}
+
+.author-image {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  margin: 5px;
+  border: 1px solid white;
+}
+
+.card-desc .author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-desc a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+}
+
+.card-desc a:hover {
+  text-decoration: underline;
+  color: #6B3FC4;
+}
+
+.eye,
+.like {
+  opacity: 1;
+}
+
+.eye,
+.like,
+.eye-hover,
+.like-hover {
+  position: absolute;
+  top: 10px;
+  width: 32px;
+  height: 32px;
+}
+
+.eye,
+.eye-hover {
+  left: 10px;
+  color: #3399ff;
+}
+
+.like,
+.like-hover {
+  right: 10px;
+  color: #ff3366;
+}
+
+.like-hover,
+.eye-hover {
+  opacity: 0;
+}
+
+.like-hover:hover,
+.eye-hover:hover {
+  opacity: 1;
+}
+
+.like:hover,
+.eye:hover {
+  opacity: 0;
+}
+
+.liked {
+  opacity: 1;
 }

@@ -11,7 +11,8 @@ export default class GeneralPage extends Component {
                 <h3>Home Page</h3>
                 <PhotoList 
                     searchPhotos={this.props.searchPhotos} 
-                    photosUrl={this.props.photosUrl} 
+                    photos={this.props.photos} 
+                    setLike={this.props.setLike}
                 />
             </section>
         );

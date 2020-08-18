@@ -46,10 +46,20 @@ export default class PhotoList extends Component {
 	}
 
 	render() {
-		const {photosUrl} = this.props;	
-		if (typeof photosUrl != "undefined" && photosUrl.length !== 0) {
-			this.photos = this.props.photosUrl.map((photoUrl) => {
-				return <PhotoCard key={photoUrl} photoUrl={photoUrl} />
+		const {photos} = this.props;	
+		if (typeof photos != "undefined" && photos.length !== 0) {
+			this.photosItems = this.props.photos.map((photo) => {
+				return <PhotoCard 
+							key={photo.id} 
+							id={photo.id}
+							photoUrl={photo.urls.small} 
+							authorName={photo.user.name}
+							authorUrl={photo.user.links.html}
+							authorImageUrl={photo.user.profile_image.medium}
+							publishDate={photo.created_at}
+							likes={photo.likes}
+							liked={photo.liked_by_user}
+							setLike={this.props.setLike}/>
 			})
 		}
 
@@ -64,7 +74,7 @@ export default class PhotoList extends Component {
 					}}
 					className="grid"
 					columnClassName="grid_column">
-					{this.photos}
+					{this.photosItems}
 				</Masonry>
 			</div>
 		)
