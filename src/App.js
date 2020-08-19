@@ -85,33 +85,7 @@ export default class App extends Component {
     pagesLoading: false
   }
 
-  // listPhotos(newLoad = false) {
-  //   if (!this.state.pagesLoading) {
-  //     this.setState({pagesLoading: true});
-  //     unsplash.photos.listPhotos(1, 10, "latest")
-  //     .then(toJson)
-  //     .then(json => {
-  //       this.setState((state) => {
-  //         let newPhotos = [];
-  //         if (newLoad) {
-  //           return {
-  //             photos: this.formArrPhotos(json),
-  //             pagesLoad: (this.state.pagesLoad + 1),
-  //             pagesLoading: false
-  //           }
-  //         } else {
-  //           return {
-  //             photos: [...this.state.photos, ...this.formArrPhotos(json)],
-  //             pagesLoad: (this.state.pagesLoad + 1),
-  //             pagesLoading: false
-  //           }
-  //         }
-  //       });
-  //     });
-  //   }
-  // }
-
-  loadPhotos(newLoad = false) {
+  loadPhotos(newLoad = false, count = 10) {
     const {searchText, pagesLoad, pagesLoading, photos} = this.state;
 
     const doAction = (promise, newLoad) => {
@@ -119,7 +93,7 @@ export default class App extends Component {
 
       promise.then(toJson)
       .then(json => {
-        console.log('loadPhotos json: ');
+        console.log('loadedPhotos json: ');
         console.log(json);
         this.setState((state) => {
           return {
@@ -132,11 +106,11 @@ export default class App extends Component {
     }
 
     if (!pagesLoading) {
-      console.log('load page ' + newLoad ? 1 : (pagesLoad + 1))
+      console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)))
       if (searchText && searchText !== '') {
-        doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), 10), newLoad);    
+        doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), count), newLoad);    
       } else {
-        doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), 10, "latest"), newLoad);
+        doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), count, "latest"), newLoad);
       }
     }
   }
@@ -163,7 +137,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.loadPhotos(false);
+    this.loadPhotos(true);
   }
 
   setLike(id, status) {
