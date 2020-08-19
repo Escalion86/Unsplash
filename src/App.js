@@ -80,7 +80,7 @@ export default class App extends Component {
   
   state = {
     photos: [],
-    searchText: '',
+    searchText: 'cats',
     pagesLoad: 0,
     pagesLoading: false
   }
@@ -96,10 +96,18 @@ export default class App extends Component {
         console.log('loadedPhotos json: ');
         console.log(json);
         this.setState((state) => {
-          return {
-            photos: [...photos, ...this.formArrPhotos(json)],
-            pagesLoad: (newLoad ? 1 : (pagesLoad + 1)),
-            pagesLoading: false
+          if (newLoad) {
+            return {
+              photos: this.formArrPhotos(json),
+              pagesLoad: 1,
+              pagesLoading: false
+            }
+          } else {
+            return {
+              photos: [...photos, ...this.formArrPhotos(json)],
+              pagesLoad: (pagesLoad + 1),
+              pagesLoading: false
+            }
           }
         });
       });
@@ -115,6 +123,15 @@ export default class App extends Component {
     }
   }
 
+  setSearchText = (searchText) => {
+    this.setState({searchText});
+  }
+
+  // searchPhotos = (searchText) => {
+  //   this.setSearchText(searchText);
+  //   this.loadPhotos();
+  // }
+
   // getPhoto(id) {
   //   unsplash.photos.getPhoto(id)//"pFqrYbhIAXs"
   //   .then(toJson)
@@ -125,8 +142,8 @@ export default class App extends Component {
   
   formArrPhotos = (json) => {
     console.log(json);
-    if ("result" in json) {
-      return json.result.map((item) => {
+    if ("results" in json) {
+      return json.results.map((item) => {
         return item;
       });
     } else {
@@ -176,7 +193,11 @@ export default class App extends Component {
     return(
       <section className="App">  
         <Router>  
-          <Route path="/" component={Header} />                
+          <Route path="/" component={() => 
+            <Header 
+            searchText={this.state.searchText}
+            setSearchText={this.setSearchText.bind(this)}
+            loadPhotos={this.loadPhotos.bind(this)} />} />                
           <Route exact path="/" component={() => 
             <GeneralPage 
               photos={this.state.photos}

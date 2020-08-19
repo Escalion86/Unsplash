@@ -74,3 +74,41 @@ header.sticky ul li a:hover {
 header.sticky ul li a.active {
     color: #6B3FC4;
 }
+
+.header-search {
+  position: relative;
+  width: 355px;
+  margin-left: 30px;
+}
+
+.header-search-input {
+  width: 100%;
+  padding: 16px 38px 16px 16px;
+  background-color: #f1f1f1;
+  border-radius: 15px;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+}
+
+.header-search-btn {
+  background-image: url('/img/search.png');
+  background-size: 22px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: 22px;
+  width: 22px;
+  outline: none;
+  border: 0;
+  position: absolute;
+  right: 13px;
+  top: 13px;
+  cursor: pointer;
+  transition-property: transform;
+  transition-duration: .5s;
+}
+
+.header-search-btn:focus .header-search-btn:hover {
+  transform: scale(1.1);
+}

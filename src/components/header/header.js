@@ -9,23 +9,45 @@ import './header.css';
 
 export default class Header extends Component {
 
-	menu = [
-		{
-			name: 'Home',
-			path: '/'
-		},
-		{
-			name: 'About',
-			path: '/about'
-		}
-	]
+	// menu = [
+	// 	{
+	// 		name: 'Home',
+	// 		path: '/'
+	// 	},
+	// 	{
+	// 		name: 'About',
+	// 		path: '/about'
+	// 	}
+	// ]
+
+	state = {
+		searchText: ''
+	};
+
+	handleSubmit = event => {
+		event.preventDefault();
+		this.props.setSearchText(this.state.searchText);
+		this.props.loadPhotos(true);
+	}
+
+	handleChange = event => {
+		const value = event.target.value;
+		console.log(value);
+		this.setState((state) => {
+			return {
+				searchText: value
+			}
+		})
+		//this.props.setSearchText(event.target.value);
+	}
 	
 	render() {
+		console.log(this.state.searchText);
 		return (
 			<>
 			<header>
 				<a className="logo" href="/" alt="logo">Picso</a>
-				<ul>	
+				{/* <ul>	
 					{this.menu.map((item, i) => {
 						return (
 							<li key={i.toString()}>
@@ -35,7 +57,18 @@ export default class Header extends Component {
 							</li>
 						)
 					})}			
-				</ul>
+				</ul> */}
+				<form action="/" name="search-form" className="header-search" onSubmit={this.handleSubmit}>
+					<input 
+						id="header-search-input" 
+						name="search-input" 
+						className="header-search-input" 
+						placeholder="Поиск" 
+						value={this.state.searchText}
+						onChange={this.handleChange} />
+					<label className="sr-only" for="header-search-input">Поиск</label>
+					<button type="submit" name="search-btn" className="header-search-btn"></button>
+				</form>
 				{/* <Link to={'/auth'}>Войти</Link> */}
 			</header>
 			</>
