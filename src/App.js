@@ -80,57 +80,64 @@ export default class App extends Component {
   
   state = {
     photos: [],
-    searchText: 'cats',
+    searchText: '',
     pagesLoad: 0,
     pagesLoading: false
   }
 
-  listPhotos(newLoad = true) {
-    if (!this.state.pagesLoading) {
+  // listPhotos(newLoad = false) {
+  //   if (!this.state.pagesLoading) {
+  //     this.setState({pagesLoading: true});
+  //     unsplash.photos.listPhotos(1, 10, "latest")
+  //     .then(toJson)
+  //     .then(json => {
+  //       this.setState((state) => {
+  //         let newPhotos = [];
+  //         if (newLoad) {
+  //           return {
+  //             photos: this.formArrPhotos(json),
+  //             pagesLoad: (this.state.pagesLoad + 1),
+  //             pagesLoading: false
+  //           }
+  //         } else {
+  //           return {
+  //             photos: [...this.state.photos, ...this.formArrPhotos(json)],
+  //             pagesLoad: (this.state.pagesLoad + 1),
+  //             pagesLoading: false
+  //           }
+  //         }
+  //       });
+  //     });
+  //   }
+  // }
+
+  loadPhotos(newLoad = false) {
+    const {searchText, pagesLoad, pagesLoading, photos} = this.state;
+
+    const doAction = (promise, newLoad) => {
       this.setState({pagesLoading: true});
-      unsplash.photos.listPhotos(1, 10, "latest")
-      .then(toJson)
+
+      promise.then(toJson)
       .then(json => {
+        console.log('loadPhotos json: ');
+        console.log(json);
         this.setState((state) => {
-          let newPhotos = [];
-          if (newLoad) {
-            return {
-              photos: this.formArrPhotos(json),
-              pagesLoad: (this.state.pagesLoad + 1),
-              pagesLoading: false
-            }
-          } else {
-            return {
-              photos: [...this.state.photos, ...this.formArrPhotos(json)],
-              pagesLoad: (this.state.pagesLoad + 1),
-              pagesLoading: false
-            }
-          }
-          
           return {
-            photos: newPhotos,
-            pagesLoad: (this.state.pagesLoad + 1),
+            photos: [...photos, ...this.formArrPhotos(json)],
+            pagesLoad: (newLoad ? 1 : (pagesLoad + 1)),
             pagesLoading: false
           }
         });
       });
     }
-  }
 
-  searchPhotos() {
-    if (!this.state.pagesLoading) {
-      this.setState({pagesLoading: true});
-      unsplash.search.photos(this.state.searchText, (this.state.pagesLoad + 1))
-      .then(toJson)
-      .then(json => {
-        this.setState((state) => {
-          return {
-            photos: [...this.state.photos, ...this.formArrPhotos(json)],
-            pagesLoad: (this.state.pagesLoad + 1),
-            pagesLoading: false
-          }
-        });
-      });
+    if (!pagesLoading) {
+      console.log('load page ' + newLoad ? 1 : (pagesLoad + 1))
+      if (searchText && searchText !== '') {
+        doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), 10), newLoad);    
+      } else {
+        doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), 10, "latest"), newLoad);
+      }
     }
   }
 
@@ -144,13 +151,19 @@ export default class App extends Component {
   
   formArrPhotos = (json) => {
     console.log(json);
-    return json.results.map((item) => {
-      return item;
-    });
+    if ("result" in json) {
+      return json.result.map((item) => {
+        return item;
+      });
+    } else {
+      return json.map((item) => {
+        return item;
+      });
+    }
   }
 
   componentDidMount() {
-    this.searchPhotos();
+    this.loadPhotos(false);
   }
 
   setLike(id, status) {
@@ -193,7 +206,7 @@ export default class App extends Component {
           <Route exact path="/" component={() => 
             <GeneralPage 
               photos={this.state.photos}
-              searchPhotos={this.searchPhotos.bind(this)}
+              loadPhotos={this.loadPhotos.bind(this)}
               setLike={this.setLike.bind(this)}
             />} />        
           <Route exact path="/about" component={AboutPage} />        

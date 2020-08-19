@@ -10,7 +10,7 @@ export default class GeneralPage extends Component {
             <section className="general">
                 <h3>Home Page</h3>
                 <PhotoList 
-                    searchPhotos={this.props.searchPhotos} 
+                    loadPhotos={this.props.loadPhotos} 
                     photos={this.props.photos} 
                     setLike={this.props.setLike}
                 />

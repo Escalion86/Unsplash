@@ -9,7 +9,7 @@ export default class PhotoList extends Component {
 	photos = null;
 
 	componentDidMount() {
-		const {searchPhotos} = this.props;
+		const {loadPhotos} = this.props;
 		
 		function detectScrollAtBottom() {
 			const windowHeight = window.innerHeight
@@ -36,7 +36,7 @@ export default class PhotoList extends Component {
 		window.onscroll = function() {
 		  	if (detectScrollAtBottom()) {
 				//alert('I AM AT THE BOTTOM');
-				searchPhotos();
+				loadPhotos(false);
 		  	}
 		};
 	}
