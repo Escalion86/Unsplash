@@ -85,6 +85,38 @@ export default class App extends Component {
     pagesLoading: false
   }
 
+  listPhotos(newLoad = true) {
+    if (!this.state.pagesLoading) {
+      this.setState({pagesLoading: true});
+      unsplash.photos.listPhotos(1, 10, "latest")
+      .then(toJson)
+      .then(json => {
+        this.setState((state) => {
+          let newPhotos = [];
+          if (newLoad) {
+            return {
+              photos: this.formArrPhotos(json),
+              pagesLoad: (this.state.pagesLoad + 1),
+              pagesLoading: false
+            }
+          } else {
+            return {
+              photos: [...this.state.photos, ...this.formArrPhotos(json)],
+              pagesLoad: (this.state.pagesLoad + 1),
+              pagesLoading: false
+            }
+          }
+          
+          return {
+            photos: newPhotos,
+            pagesLoad: (this.state.pagesLoad + 1),
+            pagesLoading: false
+          }
+        });
+      });
+    }
+  }
+
   searchPhotos() {
     if (!this.state.pagesLoading) {
       this.setState({pagesLoading: true});
@@ -101,6 +133,14 @@ export default class App extends Component {
       });
     }
   }
+
+  // getPhoto(id) {
+  //   unsplash.photos.getPhoto(id)//"pFqrYbhIAXs"
+  //   .then(toJson)
+  //   .then(json => {
+  //     return json;
+  //   })
+  // }
   
   formArrPhotos = (json) => {
     console.log(json);
@@ -114,27 +154,38 @@ export default class App extends Component {
   }
 
   setLike(id, status) {
-    unsplash.photos.likePhoto(id)
-      .then(res => {
-        if (res.ok) {
-          this.setState((state) => {
+    const doAction = (promise) => {
+      promise.then(toJson)
+        .then(res => {
+        //if (res.ok) {      
+          this.setState((state) => {           
             const newPhotos = this.state.photos.map((photo) => {
               if (id === photo.id) {
-                photo.liked_by_user = status;
+                return {...photo, ...res.photo};
               }
               return photo;
             });
-
             return {
               photos: newPhotos,
             }
           });
-        }
+          
+        //}
       })
+    }
+
+    if (status) {
+      console.log('promise to like');
+      doAction(unsplash.photos.likePhoto(id));      
+    } else {
+      console.log('promise to unlike');
+      doAction(unsplash.photos.unlikePhoto(id));
+    }
   }
 
   render () {   
     console.log('App render');
+    
     return(
       <section className="App">  
         <Router>  
