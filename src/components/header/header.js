@@ -21,18 +21,18 @@ export default class Header extends Component {
 	// ]
 
 	state = {
-		searchText: ''
+		searchText: this.props.searchText
 	};
 
 	handleSubmit = event => {
 		event.preventDefault();
-		this.props.setSearchText(this.state.searchText);
-		this.props.loadPhotos(true);
+		console.log('search submit');
+		this.props.searchPhotos(this.state.searchText);
 	}
 
 	handleChange = event => {
 		const value = event.target.value;
-		console.log(value);
+		console.log('search change: value = ' + value);
 		this.setState((state) => {
 			return {
 				searchText: value
@@ -42,7 +42,8 @@ export default class Header extends Component {
 	}
 	
 	render() {
-		console.log(this.state.searchText);
+		console.log('header render');
+		console.log('header state.searchText = ' + this.state.searchText);
 		return (
 			<>
 			<header>

@@ -9,6 +9,7 @@ export default class PhotoList extends Component {
 	photos = null;
 
 	componentDidMount() {
+		console.log('PhotoList Did Mount');
 		const {loadPhotos} = this.props;
 		
 		function detectScrollAtBottom() {
@@ -46,20 +47,21 @@ export default class PhotoList extends Component {
 	}
 
 	render() {
+		console.log('PhotoList render');
 		const {photos} = this.props;	
 		if (typeof photos != "undefined" && photos.length !== 0) {
 			this.photosItems = this.props.photos.map((photo) => {
 				return <PhotoCard 
-							key={photo.id} 
-							id={photo.id}
-							photoUrl={photo.urls.small} 
-							authorName={photo.user.name}
-							authorUrl={photo.user.links.html}
-							authorImageUrl={photo.user.profile_image.medium}
-							publishDate={photo.created_at}
-							likes={photo.likes}
-							liked={photo.liked_by_user}
-							setLike={this.props.setLike}/>
+					key={photo.id} 
+					id={photo.id}
+					photoUrl={photo.urls.small} 
+					authorName={photo.user.name}
+					authorUrl={photo.user.links.html}
+					authorImageUrl={photo.user.profile_image.medium}
+					publishDate={photo.created_at}
+					likes={photo.likes}
+					liked={photo.liked_by_user}
+					setLike={this.props.setLike}/>
 			})
 		}
 

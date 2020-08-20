@@ -8,6 +8,8 @@ import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 
 import './App.css';
 
+let token = null;
+
 const unsplash = new Unsplash({ 
   accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
   secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
@@ -35,8 +37,9 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
       .then(res => res.json())
       .then(json =>
         {
-          localStorage.setItem("unsplash-authAC-code", json.access_token);
-          unsplash.auth.setBearerToken(json.access_token);
+          token = json.access_token;
+          localStorage.setItem("unsplash-authAC-code", token);
+          unsplash.auth.setBearerToken(token);
         });
   }
 //}
@@ -88,6 +91,7 @@ export default class App extends Component {
   loadPhotos(newLoad = false, count = 10) {
     const {searchText, pagesLoad, pagesLoading, photos} = this.state;
 
+
     const doAction = (promise, newLoad) => {
       this.setState({pagesLoading: true});
 
@@ -114,7 +118,8 @@ export default class App extends Component {
     }
 
     if (!pagesLoading) {
-      console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)))
+      console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)));
+      console.log('search word: ' + searchText)
       if (searchText && searchText !== '') {
         doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), count), newLoad);    
       } else {
@@ -123,8 +128,8 @@ export default class App extends Component {
     }
   }
 
-  setSearchText = (searchText) => {
-    this.setState({searchText});
+  searchPhotos = (searchText) => {
+    this.setState({searchText}, () => this.loadPhotos(true));
   }
 
   // searchPhotos = (searchText) => {
@@ -141,7 +146,6 @@ export default class App extends Component {
   // }
   
   formArrPhotos = (json) => {
-    console.log(json);
     if ("results" in json) {
       return json.results.map((item) => {
         return item;
@@ -154,6 +158,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    console.log('App Did Mount')
     this.loadPhotos(true);
   }
 
@@ -177,7 +182,8 @@ export default class App extends Component {
         //}
       })
     }
-
+    console.log('set token for like/unlike: ' + token);
+    unsplash.auth.setBearerToken(token);
     if (status) {
       console.log('promise to like');
       doAction(unsplash.photos.likePhoto(id));      
@@ -196,7 +202,7 @@ export default class App extends Component {
           <Route path="/" component={() => 
             <Header 
             searchText={this.state.searchText}
-            setSearchText={this.setSearchText.bind(this)}
+            searchPhotos={this.searchPhotos.bind(this)}
             loadPhotos={this.loadPhotos.bind(this)} />} />                
           <Route exact path="/" component={() => 
             <GeneralPage 
