@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+//import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 //import logoMini from '../../img/logo-dev-mini.png';
 //import { Link, animateScroll as scroll } from "react-scroll";
 
@@ -44,9 +44,10 @@ export default class Header extends Component {
 	render() {
 		console.log('header render');
 		console.log('header state.searchText = ' + this.state.searchText);
+		
 		return (
 			<>
-			<header>
+			<header className={(window.scrollY > 0) ? 'sticky' : ''}>
 				<a className="logo" href="/" alt="logo">Picso</a>
 				{/* <ul>	
 					{this.menu.map((item, i) => {

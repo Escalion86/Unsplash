@@ -11,32 +11,31 @@ export default class PhotoList extends Component {
 	componentDidMount() {
 		console.log('PhotoList Did Mount');
 		const {loadPhotos} = this.props;
-		
+
 		function detectScrollAtBottom() {
 			const windowHeight = window.innerHeight
-			  ? window.innerHeight
-			  : document.documentElement.offsetHeight;
+				? window.innerHeight
+				: document.documentElement.offsetHeight;
 			const { body } = document;
 			const html = document.documentElement;
 			const docHeight = Math.max(
-			  body.scrollHeight,
-			  body.offsetHeight,
-			  html.clientHeight,
-			  html.scrollHeight,
-			  html.offsetHeight
+				body.scrollHeight,
+				body.offsetHeight,
+				html.clientHeight,
+				html.scrollHeight,
+				html.offsetHeight
 			);
 			const windowBottom = Math.round(windowHeight + window.pageYOffset);
-		  
+			
 			// Small hack for windows. It counts windowBottom in different way
 			const difference = docHeight - windowBottom;
 			const additional = difference >= 1 && difference <= 2 ? difference : 0;
-		  
+			
 			return windowBottom + additional >= docHeight;
 		};
 
 		window.onscroll = function() {
 		  	if (detectScrollAtBottom()) {
-				//alert('I AM AT THE BOTTOM');
 				loadPhotos(false);
 		  	}
 		};
@@ -66,7 +65,7 @@ export default class PhotoList extends Component {
 		}
 
 		return (
-			<div className="container">
+			<section className="container">
 				<Masonry
 					breakpointCols={{
 						default: 4,
@@ -78,7 +77,7 @@ export default class PhotoList extends Component {
 					columnClassName="grid_column">
 					{this.photosItems}
 				</Masonry>
-			</div>
+			</section>
 		)
 	}
 }

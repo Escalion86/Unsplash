@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import Unsplash, { toJson } from 'unsplash-js';
-import GeneralPage from './pages/general';
+import PhotoList from './components/photoList';
 import Header from './components/header';
-import AuthPage from './pages/auth';
 
 import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
 
@@ -205,13 +204,13 @@ export default class App extends Component {
             searchPhotos={this.searchPhotos.bind(this)}
             loadPhotos={this.loadPhotos.bind(this)} />} />                
           <Route exact path="/" component={() => 
-            <GeneralPage 
+            <PhotoList 
               photos={this.state.photos}
               loadPhotos={this.loadPhotos.bind(this)}
               setLike={this.setLike.bind(this)}
             />} />        
-          <Route exact path="/about" component={AboutPage} />        
-          <Route exact path="/auth" component={AuthPage} />                 
+          {/* <Route exact path="/about" component={AboutPage} />        
+          <Route exact path="/auth" component={AuthPage} />                  */}
         </Router>
       </section> 
   )}

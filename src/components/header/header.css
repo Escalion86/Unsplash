@@ -9,14 +9,14 @@ header {
     transition: 0.4s;
     padding: 20px 40px;
     z-index: 99;
-    background:  #333;
+    background:  #fff;
 }
 
 header .logo {
     position: relative;
     display: flex;
     font-weight: 700px;
-    color: #fff;
+    color: #000;
     text-decoration: none;
     font-size: 2em;
     text-transform: uppercase;
@@ -43,7 +43,7 @@ header ul li a {
     position: relative;
     margin: 0 15px;
     text-decoration: none;
-    color: #fff;
+    color: #000;
     letter-spacing: 2px;
     font-size: 24px;
     font-weight: 500;
@@ -55,16 +55,16 @@ header ul li a.active {
 
 header.sticky {
     padding: 6px 40px;
-    background: #fff;
+    background: #333;
 }
 
 header.sticky .logo {
     padding: 3px 0;
-    color: #000;
+    color: #fff;
 }
 
 header.sticky ul li a {
-    color: #000;
+    color: #fff;
 }
 
 header.sticky ul li a:hover {
