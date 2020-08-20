@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import Unsplash, { toJson } from 'unsplash-js';
 import PhotoList from './components/photoList';
 import Header from './components/header';
+import PhotoPage from './components/photoPage';
 
-import { Link, BrowserRouter as Router, Route } from 'react-router-dom';
+import { Link, BrowserRouter as Router, Route, useParams } from 'react-router-dom';
 
 import './App.css';
 
@@ -192,27 +193,42 @@ export default class App extends Component {
     }
   }
 
+  setPhotoFromState = (id) => {
+    let res = null;
+    this.state.photos.forEach((photo) => {
+      if (photo.id === id) {
+        res = photo;
+      }
+    });
+    return res;
+  }
+
   render () {   
     console.log('App render');
     
     return(
-      <section className="App">  
+      <div className="App">  
         <Router>  
           <Route path="/" component={() => 
             <Header 
-            searchText={this.state.searchText}
-            searchPhotos={this.searchPhotos.bind(this)}
-            loadPhotos={this.loadPhotos.bind(this)} />} />                
+              searchText={this.state.searchText}
+              searchPhotos={this.searchPhotos.bind(this)} />} />                
           <Route exact path="/" component={() => 
             <PhotoList 
               photos={this.state.photos}
               loadPhotos={this.loadPhotos.bind(this)}
-              setLike={this.setLike.bind(this)}
-            />} />        
+              setLike={this.setLike.bind(this)} />
+          } />   
+          <Route exact path="/photo/:id" component={(props) => 
+            <PhotoPage 
+              unsplash={unsplash} 
+              photo={this.setPhotoFromState(props.match.params.id)}
+              id={props.match.params.id} />
+          } />
           {/* <Route exact path="/about" component={AboutPage} />        
           <Route exact path="/auth" component={AuthPage} />                  */}
         </Router>
-      </section> 
+      </div> 
   )}
 };
 

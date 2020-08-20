@@ -65,7 +65,7 @@ export default class PhotoList extends Component {
 		}
 
 		return (
-			<section className="container">
+			<section>
 				<Masonry
 					breakpointCols={{
 						default: 4,

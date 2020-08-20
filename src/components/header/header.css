@@ -1,114 +1,77 @@
 header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.4s;
-    padding: 20px 40px;
-    z-index: 99;
-    background:  #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.4s;
+  padding: 20px 40px;
+  z-index: 99;
+  background: #fff;
 }
 
 header .logo {
-    position: relative;
-    display: flex;
-    font-weight: 700px;
-    color: #000;
-    text-decoration: none;
-    font-size: 2em;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: 0.4s;
+  position: relative;
+  display: flex;
+  font-weight: 700px;
+  color: #000;
+  text-decoration: none;
+  font-size: 2em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: 0.4s;
 }
 
 header ul {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 header ul li {
-    position: relative;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: relative;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 header ul li a {
-    position: relative;
-    margin: 0 15px;
-    text-decoration: none;
-    color: #000;
-    letter-spacing: 2px;
-    font-size: 24px;
-    font-weight: 500;
-    transition: 0.4s;
+  position: relative;
+  margin: 0 15px;
+  text-decoration: none;
+  color: #000;
+  letter-spacing: 2px;
+  font-size: 24px;
+  font-weight: 500;
+  transition: 0.4s;
 }
+
 header ul li a.active {
-    color: #6B3FC4;
+  color: #6B3FC4;
 }
 
 header.sticky {
-    padding: 6px 40px;
-    background: #333;
+  padding: 6px 40px;
+  background: #333;
 }
 
 header.sticky .logo {
-    padding: 3px 0;
-    color: #fff;
+  padding: 3px 0;
+  color: #fff;
 }
 
 header.sticky ul li a {
-    color: #fff;
+  color: #fff;
 }
 
 header.sticky ul li a:hover {
-    color: #6B3FC4;
+  color: #6B3FC4;
 }
 
 header.sticky ul li a.active {
-    color: #6B3FC4;
-}
-
-.header-search {
-  position: relative;
-  width: 355px;
-  margin-left: 30px;
-}
-
-.header-search-input {
-  width: 100%;
-  padding: 16px 38px 16px 16px;
-  background-color: #f1f1f1;
-  border-radius: 15px;
-  border: none;
-  font-size: 16px;
-  font-weight: 500;
-  outline: none;
-}
-
-.header-search-btn {
-  background-image: url('/img/search.png');
-  background-size: 22px auto;
-  background-repeat: no-repeat;
-  background-position: center center;
-  height: 22px;
-  width: 22px;
-  outline: none;
-  border: 0;
-  position: absolute;
-  right: 13px;
-  top: 13px;
-  cursor: pointer;
-  transition-property: transform;
-  transition-duration: .5s;
-}
-
-.header-search-btn:focus .header-search-btn:hover {
-  transform: scale(1.1);
+  color: #6B3FC4;
 }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link, BrowserRouter as Router, Route, useParams } from 'react-router-dom';
 
 import './photoCard.css';
 
@@ -19,11 +20,17 @@ export default class PhotoCard extends Component {
 			<div className='grid-item'>
 				<img className="photo" src={photoUrl} alt={'image: ' + photoUrl} />
 				<div className="card-background">
+					
+					<Link 
+						to={`/photo/${id}`}
+					>
+						<i className="eye far fa-eye fa-2x"></i>
+						<i className="eye-hover fas fa-eye fa-2x"></i>
+					</Link>
 					<i className="like far fa-heart fa-2x"></i>
-					<i className="eye far fa-eye fa-2x"></i>
 					<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}
 						onClick={() => setLike(id, !liked)}></i>
-					<i className="eye-hover fas fa-eye fa-2x"></i>
+					
 
 					<div className="card-desc">
 						<div className="author">
