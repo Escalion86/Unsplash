@@ -17,7 +17,7 @@ export default class PhotoCard extends Component {
 			id, 
 			setLike} = this.props;
 		return (
-			<div className='grid-item'>
+			<div className='grid-item card'>
 				<img className="photo" src={photoUrl} alt={'image: ' + photoUrl} />
 				<div className="card-background">
 					

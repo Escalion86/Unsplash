@@ -221,9 +221,10 @@ export default class App extends Component {
           } />   
           <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
-              unsplash={unsplash} 
+              //unsplash={unsplash} 
               photo={this.setPhotoFromState(props.match.params.id)}
-              id={props.match.params.id} />
+              //id={props.match.params.id}
+              setLike={this.setLike.bind(this)} />
           } />
           {/* <Route exact path="/about" component={AboutPage} />        
           <Route exact path="/auth" component={AuthPage} />                  */}
