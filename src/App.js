@@ -193,8 +193,9 @@ export default class App extends Component {
     }
   }
 
-  setPhotoFromState = (id) => {
+  getPhotoFromState = (id) => {
     let res = null;
+    
     this.state.photos.forEach((photo) => {
       if (photo.id === id) {
         res = photo;
@@ -222,7 +223,7 @@ export default class App extends Component {
           <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
               //unsplash={unsplash} 
-              photo={this.setPhotoFromState(props.match.params.id)}
+              photo={this.getPhotoFromState(props.match.params.id)}
               //id={props.match.params.id}
               setLike={this.setLike.bind(this)} />
           } />
@@ -231,10 +232,4 @@ export default class App extends Component {
         </Router>
       </div> 
   )}
-};
-
-const AboutPage = () => {
-  return (
-    <h3>About Page</h3>
-  );
 };
