@@ -6,7 +6,7 @@
 .pnp.js
 *.zip
 *.rar
-.vscode
+/.vscode
 
 # testing
 /coverage
