@@ -47,13 +47,13 @@ export default class PhotoList extends Component {
 
 	render() {
 		console.log('PhotoList render');
-		const {photos} = this.props;	
+		const {photos, setLike} = this.props;	
 		if (typeof photos != "undefined" && photos.length !== 0) {
 			this.photosItems = this.props.photos.map((photo) => {
 				return <PhotoCard 
 					key={photo.id} 
 					photo={photo}
-					setLike={this.props.setLike}/>
+					setLike={setLike}/>
 			})
 		}
 

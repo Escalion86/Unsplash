@@ -4,10 +4,6 @@ import './photoPage.css';
 
 export default class PhotoPage extends Component {
 
-	// state = {
-	// 	photo: null
-	// }
-
 	render() {
 		const {photo} = this.props;
 		//let photoUrl = null;

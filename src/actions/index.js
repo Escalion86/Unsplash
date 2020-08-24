@@ -12,3 +12,9 @@ export const search = (searchText) => {
         searchText
     }
 }
+
+export const loadPhotos = () => {
+    return {
+        type: 'LOAD_PHOTOS'
+    }
+}

@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import Unsplash, { toJson } from 'unsplash-js';
 import PhotoList from './components/photoList';
 import Header from './components/header';
 import PhotoPage from './components/photoPage';
+
+import { setLike, search, loadPhotos } from './actions';
 
 import { Link, BrowserRouter as Router, Route, useParams } from 'react-router-dom';
 
@@ -81,56 +84,18 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
 
 export default class App extends Component {
   
-  state = {
-    photos: [],
-    searchText: '',
-    pagesLoad: 0,
-    pagesLoading: false
-  }
+  // state = {
+  //   photos: [],
+  //   searchText: '',
+  //   pagesLoad: 0,
+  //   pagesLoading: false
+  // }
 
-  loadPhotos(newLoad = false, count = 10) {
-    const {searchText, pagesLoad, pagesLoading, photos} = this.state;
+  
 
-
-    const doAction = (promise, newLoad) => {
-      this.setState({pagesLoading: true});
-
-      promise.then(toJson)
-      .then(json => {
-        console.log('loadedPhotos json: ');
-        console.log(json);
-        this.setState((state) => {
-          if (newLoad) {
-            return {
-              photos: this.formArrPhotos(json),
-              pagesLoad: 1,
-              pagesLoading: false
-            }
-          } else {
-            return {
-              photos: [...photos, ...this.formArrPhotos(json)],
-              pagesLoad: (pagesLoad + 1),
-              pagesLoading: false
-            }
-          }
-        });
-      });
-    }
-
-    if (!pagesLoading) {
-      console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)));
-      console.log('search word: ' + searchText)
-      if (searchText && searchText !== '') {
-        doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), count), newLoad);    
-      } else {
-        doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), count, "latest"), newLoad);
-      }
-    }
-  }
-
-  searchPhotos = (searchText) => {
-    this.setState({searchText}, () => this.loadPhotos(true));
-  }
+  // searchPhotos = (searchText) => {
+  //   this.setState({searchText}, () => this.loadPhotos(true));
+  // }
 
   // searchPhotos = (searchText) => {
   //   this.setSearchText(searchText);
@@ -145,91 +110,112 @@ export default class App extends Component {
   //   })
   // }
   
-  formArrPhotos = (json) => {
-    if ("results" in json) {
-      return json.results.map((item) => {
-        return item;
-      });
-    } else {
-      return json.map((item) => {
-        return item;
-      });
-    }
-  }
+  // formArrPhotos = (json) => {
+  //   if ("results" in json) {
+  //     return json.results.map((item) => {
+  //       return item;
+  //     });
+  //   } else {
+  //     return json.map((item) => {
+  //       return item;
+  //     });
+  //   }
+  // }
 
-  componentDidMount() {
-    console.log('App Did Mount')
-    this.loadPhotos(true);
-  }
+  // componentDidMount() {
+  //   console.log('App Did Mount')
+  //   this.loadPhotos(true);
+  // }
 
-  setLike(id, status) {
-    const doAction = (promise) => {
-      promise.then(toJson)
-        .then(res => {
-        //if (res.ok) {      
-          this.setState((state) => {           
-            const newPhotos = this.state.photos.map((photo) => {
-              if (id === photo.id) {
-                return {...photo, ...res.photo};
-              }
-              return photo;
-            });
-            return {
-              photos: newPhotos,
-            }
-          });
+  // setLike(id, status) {
+  //   const doAction = (promise) => {
+  //     promise.then(toJson)
+  //       .then(res => {
+  //       //if (res.ok) {      
+  //         this.setState((state) => {           
+  //           const newPhotos = this.state.photos.map((photo) => {
+  //             if (id === photo.id) {
+  //               return {...photo, ...res.photo};
+  //             }
+  //             return photo;
+  //           });
+  //           return {
+  //             photos: newPhotos,
+  //           }
+  //         });
           
-        //}
-      })
-    }
-    console.log('set token for like/unlike: ' + token);
-    unsplash.auth.setBearerToken(token);
-    if (status) {
-      console.log('promise to like');
-      doAction(unsplash.photos.likePhoto(id));      
-    } else {
-      console.log('promise to unlike');
-      doAction(unsplash.photos.unlikePhoto(id));
-    }
-  }
+  //       //}
+  //     })
+  //   }
+  //   console.log('set token for like/unlike: ' + token);
+  //   unsplash.auth.setBearerToken(token);
+  //   if (status) {
+  //     console.log('promise to like');
+  //     doAction(unsplash.photos.likePhoto(id));      
+  //   } else {
+  //     console.log('promise to unlike');
+  //     doAction(unsplash.photos.unlikePhoto(id));
+  //   }
+  // }
 
-  getPhotoFromState = (id) => {
-    let res = null;
+  // getPhotoFromState = (id) => {
+  //   let res = null;
     
-    this.state.photos.forEach((photo) => {
-      if (photo.id === id) {
-        res = photo;
-      }
-    });
-    return res;
-  }
+  //   this.state.photos.forEach((photo) => {
+  //     if (photo.id === id) {
+  //       res = photo;
+  //     }
+  //   });
+  //   return res;
+  // }
 
   render () {   
     console.log('App render');
+    const {state, setLike, search, loadPhotos} = this.props;
     
     return(
       <div className="App">  
         <Router>  
           <Route path="/" component={() => 
             <Header 
-              searchText={this.state.searchText}
-              searchPhotos={this.searchPhotos.bind(this)} />} />                
+              serachText={state.searchText}
+              search={search} />
+          } />                
           <Route exact path="/" component={() => 
             <PhotoList 
-              photos={this.state.photos}
-              loadPhotos={this.loadPhotos.bind(this)}
-              setLike={this.setLike.bind(this)} />
+              photos={state.photos}
+              loadPhotos={loadPhotos}
+              setLike={setLike} />
           } />   
-          <Route exact path="/photo/:id" component={(props) => 
+          {/* <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
               //unsplash={unsplash} 
               photo={this.getPhotoFromState(props.match.params.id)}
               //id={props.match.params.id}
               setLike={this.setLike.bind(this)} />
-          } />
+          } /> */}
           {/* <Route exact path="/about" component={AboutPage} />        
           <Route exact path="/auth" component={AuthPage} />                  */}
         </Router>
       </div> 
   )}
 };
+
+const mapStateToProps = (state) => {
+  return {
+    state
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setLike: (id, liked) => dispatch(setLike(id, liked)),
+    search: (searchText) => dispatch(search(searchText)),
+    loadPhotos: () => dispatch(loadPhotos())
+  }
+}
+
+App = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

@@ -7,6 +7,8 @@ import './header.css';
 export default class Header extends Component {
 	render() {
 		console.log('header render');
+
+		const {searchText, search} = this.props;
 		
 		return (
 			<header className={(window.scrollY > 0) ? 'sticky' : ''}>
@@ -14,8 +16,8 @@ export default class Header extends Component {
 					<a className="logo" href="/" alt="logo">Picso</a>
 					<Route exact path="/" component={() => 
 						<SearchForm 
-							searchText={this.props.searchText}
-							searchPhotos={this.props.searchPhotos} />
+							searchText={searchText}
+							search={search} />
 					} />  	
 					<Route path="/photo" component={
 						<Link to="/">Back</Link>

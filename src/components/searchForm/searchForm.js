@@ -25,18 +25,18 @@ export default class SearchForm extends Component {
 	// }
 
 	render() {
-		const {searchPhotos, searchText} = this.props;
+		const {search, searchText} = this.props;
 		return (
 			<form action="/" name="search-form" className="search-form">
 				<input 
 					name="search-input" 
 					className="search-input" 
 					placeholder="Поиск" 
-					//value={searchText}
+					value={searchText}
 					//onChange={this.handleChange}
 					onKeyDown={e => {
 						if (e.keyCode === 13) {
-							searchPhotos(e.target.value);
+							search(e.target.value);
 						}
 					}}
 				/>
