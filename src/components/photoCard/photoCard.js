@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link, BrowserRouter as Router, Route, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './photoCard.css';
 
