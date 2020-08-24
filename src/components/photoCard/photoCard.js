@@ -6,16 +6,17 @@ import './photoCard.css';
 export default class PhotoCard extends Component {
 
 	render() {
-		const {
-			photoUrl, 
-			authorName, 
-			authorUrl, 
-			authorImageUrl, 
-			publishDate, 
-			likes, 
-			liked, 
-			id, 
-			setLike} = this.props;
+		const {photo, setLike} = this.props;
+
+		const id = photo.id,
+			  photoUrl = photo.urls.small,
+			  authorName = photo.user.name,
+			  authorUrl = photo.user.links.html,
+			  authorImageUrl = photo.user.profile_image.medium,
+			  publishDate = photo.created_at,
+			  likes = photo.likes,
+			  liked = photo.liked_by_user;
+
 		return (
 			<div className='grid-item card'>
 				<img className="photo" src={photoUrl} alt={'image: ' + photoUrl} />

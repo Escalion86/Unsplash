@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PhotoCard from '../photoCard';
-import Masonry from 'react-masonry-css'
+import Masonry from 'react-masonry-css';
 
 import './photoList.css';
 
@@ -52,14 +52,7 @@ export default class PhotoList extends Component {
 			this.photosItems = this.props.photos.map((photo) => {
 				return <PhotoCard 
 					key={photo.id} 
-					id={photo.id}
-					photoUrl={photo.urls.small} 
-					authorName={photo.user.name}
-					authorUrl={photo.user.links.html}
-					authorImageUrl={photo.user.profile_image.medium}
-					publishDate={photo.created_at}
-					likes={photo.likes}
-					liked={photo.liked_by_user}
+					photo={photo}
 					setLike={this.props.setLike}/>
 			})
 		}
