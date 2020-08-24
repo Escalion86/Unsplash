@@ -83,7 +83,7 @@ export default class App extends Component {
   
   state = {
     photos: [],
-    searchText: 'cats',
+    searchText: '',
     pagesLoad: 0,
     pagesLoading: false
   }
