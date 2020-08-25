@@ -8,7 +8,7 @@ export default class Header extends Component {
 	render() {
 		console.log('header render');
 
-		const {searchText, search} = this.props;
+		const {searchText, newSearch} = this.props;
 		
 		return (
 			<header className={(window.scrollY > 0) ? 'sticky' : ''}>
@@ -17,9 +17,9 @@ export default class Header extends Component {
 					<Route exact path="/" component={() => 
 						<SearchForm 
 							searchText={searchText}
-							search={search} />
+							newSearch={newSearch} />
 					} />  	
-					<Route path="/photo" component={
+					<Route path="/photo" component={() =>
 						<Link to="/">Back</Link>
 					} /> 		
 				</Router>  

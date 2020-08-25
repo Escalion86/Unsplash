@@ -6,15 +6,24 @@ export const setLike = (id, liked) => {
     }
 }
 
-export const search = (searchText) => {
+export const searchStart = (searchText, newLoad) => {
     return {
-        type: 'SEARCH',
+        type: 'SEARCH_START',
+        newLoad,
         searchText
     }
 }
 
-export const loadPhotos = () => {
+export const searchFinish = (photos, newLoad) => {
     return {
-        type: 'LOAD_PHOTOS'
+        type: 'SEARCH_FINISH',
+        newLoad,
+        photos
     }
 }
+
+// export const loadPhotos = () => {
+//     return {
+//         type: 'LOAD_PHOTOS'
+//     }
+// }

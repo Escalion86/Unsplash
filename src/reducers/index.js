@@ -5,45 +5,6 @@ let initialState = {
     pagesLoading: false
 };
 
-// const loadPhotos = (state, newLoad = false, count = 10) => {
-//     const {searchText, pagesLoad, pagesLoading, photos} = state;
-
-//     const doAction = (promise, newLoad) => {
-//       this.setState({pagesLoading: true});
-
-//       promise.then(toJson)
-//       .then(json => {
-//         console.log('loadedPhotos json: ');
-//         console.log(json);
-//         this.setState((state) => {
-//           if (newLoad) {
-//             return {
-//               photos: this.formArrPhotos(json),
-//               pagesLoad: 1,
-//               pagesLoading: false
-//             }
-//           } else {
-//             return {
-//               photos: [...photos, ...this.formArrPhotos(json)],
-//               pagesLoad: (pagesLoad + 1),
-//               pagesLoading: false
-//             }
-//           }
-//         });
-//       });
-//     }
-
-//     if (!pagesLoading) {
-//       console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)));
-//       console.log('search word: ' + searchText)
-//       if (searchText && searchText !== '') {
-//         doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), count), newLoad);    
-//       } else {
-//         doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), count, "latest"), newLoad);
-//       }
-//     }
-//   }
-
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'SET_LIKE': {
@@ -60,20 +21,33 @@ const reducer = (state = initialState, action) => {
             }
         }
 
-        case 'SEARCH': {
+        case 'SEARCH_START': {
             console.log('SEARCH: ' + action.searchText);
             return {
                 ...state, 
-                searchText: action.searchText,
+                photos: action.newLoad ? [] : state.photos,
+                pagesLoad: action.newLoad ? 0 : state.pagesLoad,
+                pagesLoading: true,
+                searchText: action.searchText
             }         
         }
 
-        case 'LOAD_PHOTOS': {
-            console.log('LOAD_PHOTOS');
+        case 'SEARCH_FINISH': {
+            console.log('SEARCH_FINISH');
             return {
-                ...state
+                ...state, 
+                pagesLoad: state.pagesLoad + 1,
+                pagesLoading: false,
+                photos: action.newLoad ? action.photos : [...state.photos, ...action.photos]
             }         
         }
+
+        // case 'LOAD_PHOTOS': {
+        //     console.log('LOAD_PHOTOS');
+        //     return {
+        //         ...state
+        //     }         
+        // }
                     
         default: 
             return state;

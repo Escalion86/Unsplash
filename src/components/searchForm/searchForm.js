@@ -25,22 +25,23 @@ export default class SearchForm extends Component {
 	// }
 
 	render() {
-		const {search, searchText} = this.props;
+		const {newSearch, searchText} = this.props;
+		console.log('searchText:' + searchText);
 		return (
 			<form action="/" name="search-form" className="search-form">
 				<input 
 					name="search-input" 
 					className="search-input" 
 					placeholder="Поиск" 
-					value={searchText}
+					defaultValue={searchText}
 					//onChange={this.handleChange}
 					onKeyDown={e => {
 						if (e.keyCode === 13) {
-							search(e.target.value);
+							newSearch(e.target.value);
 						}
 					}}
 				/>
-				<label className="sr-only" for="search-input">Поиск</label>
+				<label className="sr-only" htmlFor="search-input">Поиск</label>
 				<button type="submit" name="search-btn" className="search-btn"></button>
 			</form>
 		)

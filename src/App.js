@@ -5,7 +5,7 @@ import PhotoList from './components/photoList';
 import Header from './components/header';
 import PhotoPage from './components/photoPage';
 
-import { setLike, search, loadPhotos } from './actions';
+import { setLike, searchStart, searchFinish } from './actions';
 
 import { Link, BrowserRouter as Router, Route, useParams } from 'react-router-dom';
 
@@ -16,8 +16,8 @@ let token = null;
 const unsplash = new Unsplash({ 
   accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
   secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
-  //callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
-  callbackUrl: "http://picso.escalion.ru"
+  callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
+  //callbackUrl: "http://picso.escalion.ru"
 });
 
 const authenticationUrl = unsplash.auth.getAuthenticationUrl([
@@ -26,11 +26,11 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
 ]);
 
 //Проверяем токен и если он есть, то авторизируемся по нему напрямую
-//const token = localStorage.getItem("unsplash-authAC-code");
-//if (token) {
-//  unsplash.auth.setBearerToken(token);
+token = localStorage.getItem("unsplash-authAC-code");
+if (token) {
+  unsplash.auth.setBearerToken(token);
 //если токена нет, то смотрим получен ли код авторизации и если код не получен, то получаем код переадресацией
-//} else {
+} else {
   const code = window.location.search.split('code=')[1];
   //const code = "WErxFguoBXoYFYvA9EiAFi27LuNwCxaQhEzryVXuZjU";
   if (!code) {
@@ -45,7 +45,7 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
           unsplash.auth.setBearerToken(token);
         });
   }
-//}
+}
 
 //    window.location.assign(authenticationUrl);
 
@@ -83,16 +83,6 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
 //});
 
 export default class App extends Component {
-  
-  // state = {
-  //   photos: [],
-  //   searchText: '',
-  //   pagesLoad: 0,
-  //   pagesLoading: false
-  // }
-
-  
-
   // searchPhotos = (searchText) => {
   //   this.setState({searchText}, () => this.loadPhotos(true));
   // }
@@ -110,17 +100,17 @@ export default class App extends Component {
   //   })
   // }
   
-  // formArrPhotos = (json) => {
-  //   if ("results" in json) {
-  //     return json.results.map((item) => {
-  //       return item;
-  //     });
-  //   } else {
-  //     return json.map((item) => {
-  //       return item;
-  //     });
-  //   }
-  // }
+  formArrPhotos = (json) => {
+    if ("results" in json) {
+      return json.results.map((item) => {
+        return item;
+      });
+    } else {
+      return json.map((item) => {
+        return item;
+      });
+    }
+  }
 
   // componentDidMount() {
   //   console.log('App Did Mount')
@@ -169,24 +159,108 @@ export default class App extends Component {
   //   return res;
   // }
 
+  // loadPhotos = (state, newLoad = false, count = 10) => {
+  //   const {searchText, pagesLoad, pagesLoading, photos} = state;
+
+  //   const doAction = (promise, newLoad) => {
+  //     this.setState({pagesLoading: true});
+
+  //     promise.then(toJson)
+  //     .then(json => {
+  //       console.log('loadedPhotos json: ');
+  //       console.log(json);
+  //       this.setState((state) => {
+  //         if (newLoad) {
+  //           return {
+  //             photos: this.formArrPhotos(json),
+  //             pagesLoad: 1,
+  //             pagesLoading: false
+  //           }
+  //         } else {
+  //           return {
+  //             photos: [...photos, ...this.formArrPhotos(json)],
+  //             pagesLoad: (pagesLoad + 1),
+  //             pagesLoading: false
+  //           }
+  //         }
+  //       });
+  //     });
+  //   }
+
+  //   if (!pagesLoading) {
+  //     console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)));
+  //     console.log('search word: ' + searchText)
+  //     if (searchText && searchText !== '') {
+  //       doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), count), newLoad);    
+  //     } else {
+  //       doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), count, "latest"), newLoad);
+  //     }
+  //   }
+  // }
+
+  componentDidMount() {
+    this.loadPhotos();
+  }
+
+  newLoadPhotos = (searchText) => {
+    this.loadPhotos(this.props.dispatch, searchText, true)
+  }
+
+  nextLoadPhotos = () => {
+    this.loadPhotos(this.props.dispatch, this.props.state.searchText, false)
+  }
+
+  loadPhotos = (dispatch = this.props.dispatch, searchText = this.props.state.searchText, newLoad = false) => {  
+    if (!this.props.state.pagesLoading) {
+      dispatch(searchStart(searchText, newLoad));
+      console.log('TEST ' + this.props.state.pagesLoad);
+      console.log(newLoad);
+
+      if (searchText && searchText !== '') {
+        return unsplash.search.photos(searchText, this.props.state.pagesLoad + 1, 10)
+              .then(toJson)
+              .then(json => {
+                console.log('loadedPhotos json: ');
+                console.log(json);
+                dispatch(searchFinish(this.formArrPhotos(json), newLoad));
+              });;
+      } else {
+        
+        return unsplash.photos.listPhotos( this.props.state.pagesLoad + 1, 10, "latest")
+              .then(toJson)
+              .then(json => {
+                console.log('loadedPhotos json: ');
+                console.log(json);
+                dispatch(searchFinish(this.formArrPhotos(json), newLoad));
+              });;
+      }
+    }
+  }
+
   render () {   
     console.log('App render');
-    const {state, setLike, search, loadPhotos} = this.props;
-    
+    const {state, setLike} = this.props;
+
+    // if (state.pagesLoading) {
+    //   this.loadPhotos();
+    // }
+
+    console.log(this.props);
     return(
       <div className="App">  
         <Router>  
           <Route path="/" component={() => 
             <Header 
-              serachText={state.searchText}
-              search={search} />
+              searchText={state.searchText}
+              newSearch={this.newLoadPhotos.bind(this)} />
           } />                
           <Route exact path="/" component={() => 
             <PhotoList 
               photos={state.photos}
-              loadPhotos={loadPhotos}
+              nextSearch={this.nextLoadPhotos.bind(this)}
+              //loadPhotos={loadPhotos}
               setLike={setLike} />
-          } />   
+          } />  
           {/* <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
               //unsplash={unsplash} 
@@ -210,8 +284,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setLike: (id, liked) => dispatch(setLike(id, liked)),
-    search: (searchText) => dispatch(search(searchText)),
-    loadPhotos: () => dispatch(loadPhotos())
+    searchStart: (searchText, newLoad) => dispatch(searchStart(searchText, newLoad)),
+    searchFinish: (photos, newLoad) => dispatch(searchFinish(photos, newLoad)),
+    dispatch: (action) => dispatch(action)
+    //loadPhotos: () => dispatch(loadPhotos())
   }
 }
 
