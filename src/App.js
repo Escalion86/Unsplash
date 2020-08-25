@@ -132,13 +132,10 @@ export default class App extends Component {
   //           return {
   //             photos: newPhotos,
   //           }
-  //         });
-          
+  //         });       
   //       //}
   //     })
   //   }
-  //   console.log('set token for like/unlike: ' + token);
-  //   unsplash.auth.setBearerToken(token);
   //   if (status) {
   //     console.log('promise to like');
   //     doAction(unsplash.photos.likePhoto(id));      
@@ -148,16 +145,15 @@ export default class App extends Component {
   //   }
   // }
 
-  // getPhotoFromState = (id) => {
-  //   let res = null;
-    
-  //   this.state.photos.forEach((photo) => {
-  //     if (photo.id === id) {
-  //       res = photo;
-  //     }
-  //   });
-  //   return res;
-  // }
+  getPhotoFromState = (id) => {
+    let res = null;
+    this.props.state.photos.forEach((photo) => {
+      if (photo.id === id) {
+        res = photo;
+      }
+    });
+    return res;
+  }
 
   // loadPhotos = (state, newLoad = false, count = 10) => {
   //   const {searchText, pagesLoad, pagesLoading, photos} = state;
@@ -261,15 +257,14 @@ export default class App extends Component {
               //loadPhotos={loadPhotos}
               setLike={setLike} />
           } />  
-          {/* <Route exact path="/photo/:id" component={(props) => 
+          <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
               //unsplash={unsplash} 
               photo={this.getPhotoFromState(props.match.params.id)}
               //id={props.match.params.id}
-              setLike={this.setLike.bind(this)} />
-          } /> */}
-          {/* <Route exact path="/about" component={AboutPage} />        
-          <Route exact path="/auth" component={AuthPage} />                  */}
+              //setLike={this.setLike.bind(this)}
+           />
+          } />
         </Router>
       </div> 
   )}
