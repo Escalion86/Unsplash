@@ -41,13 +41,6 @@ const reducer = (state = initialState, action) => {
                 photos: action.newLoad ? action.photos : [...state.photos, ...action.photos]
             }         
         }
-
-        // case 'LOAD_PHOTOS': {
-        //     console.log('LOAD_PHOTOS');
-        //     return {
-        //         ...state
-        //     }         
-        // }
                     
         default: 
             return state;

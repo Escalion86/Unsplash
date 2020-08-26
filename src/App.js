@@ -117,33 +117,26 @@ export default class App extends Component {
   //   this.loadPhotos(true);
   // }
 
-  // setLike(id, status) {
-  //   const doAction = (promise) => {
-  //     promise.then(toJson)
-  //       .then(res => {
-  //       //if (res.ok) {      
-  //         this.setState((state) => {           
-  //           const newPhotos = this.state.photos.map((photo) => {
-  //             if (id === photo.id) {
-  //               return {...photo, ...res.photo};
-  //             }
-  //             return photo;
-  //           });
-  //           return {
-  //             photos: newPhotos,
-  //           }
-  //         });       
-  //       //}
-  //     })
-  //   }
-  //   if (status) {
-  //     console.log('promise to like');
-  //     doAction(unsplash.photos.likePhoto(id));      
-  //   } else {
-  //     console.log('promise to unlike');
-  //     doAction(unsplash.photos.unlikePhoto(id));
-  //   }
-  // }
+  setLike_func(id, status) {
+    const doAction = (promise) => {
+      promise.then(toJson)
+        .then(res => {      
+          this.props.state.photos.forEach((photo) => {
+            if (id === photo.id) {
+              this.props.dispatch(setLike(id, res.photo.liked_by_user));
+            }
+          });
+      })
+    }
+    
+    if (status) {
+      console.log('promise to like');
+      doAction(unsplash.photos.likePhoto(id));      
+    } else {
+      console.log('promise to unlike');
+      doAction(unsplash.photos.unlikePhoto(id));
+    }
+  }
 
   getPhotoFromState = (id) => {
     let res = null;
@@ -237,10 +230,6 @@ export default class App extends Component {
     console.log('App render');
     const {state, setLike} = this.props;
 
-    // if (state.pagesLoading) {
-    //   this.loadPhotos();
-    // }
-
     console.log(this.props);
     return(
       <div className="App">  
@@ -255,14 +244,14 @@ export default class App extends Component {
               photos={state.photos}
               nextSearch={this.nextLoadPhotos.bind(this)}
               //loadPhotos={loadPhotos}
-              setLike={setLike} />
+              setLike={this.setLike_func.bind(this)} />
           } />  
           <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
               //unsplash={unsplash} 
               photo={this.getPhotoFromState(props.match.params.id)}
               //id={props.match.params.id}
-              //setLike={this.setLike.bind(this)}
+              setLike={this.setLike_func.bind(this)}
            />
           } />
         </Router>

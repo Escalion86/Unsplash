@@ -21,9 +21,3 @@ export const searchFinish = (photos, newLoad) => {
         photos
     }
 }
-
-// export const loadPhotos = () => {
-//     return {
-//         type: 'LOAD_PHOTOS'
-//     }
-// }
