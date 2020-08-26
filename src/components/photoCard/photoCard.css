@@ -63,10 +63,22 @@
   color: #6B3FC4;
 }
 
+.card .likes-field {
+  position: absolute;
+  top: 10px;
+  width: 32px;
+  height: 32px;
+  right: 10px;
+}
+
 .card .eye,
 .card .like {
   opacity: 1;
-  
+}
+
+.card .eye,
+.card .eye-hover {
+  top: 10px;
 }
 
 .card .eye,
@@ -74,7 +86,6 @@
 .card .eye-hover,
 .card .like-hover {
   position: absolute;
-  top: 10px;
   width: 32px;
   height: 32px;
   cursor: pointer;
@@ -87,8 +98,8 @@
 }
 
 .card .like,
-.card .like-hover {
-  right: 10px;
+.card .like-hover,
+.card .spinner {
   color: #ff3366;
 }
 

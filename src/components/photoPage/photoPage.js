@@ -21,7 +21,7 @@ export default class PhotoPage extends Component {
 
 		const liked = photo.liked_by_user;
 
-		const likes = photo.wait_like ? 
+		const likesField = photo.wait_like ? 
 		(
 			<div className="likes-field">
 				<i className="spinner fas fa-spinner fa-pulse fa-2x"></i>
@@ -57,7 +57,7 @@ export default class PhotoPage extends Component {
 							<b>Опубликовано: </b>
 							<i>{photo.created_at.slice(0,10)}</i>
 						</div>
-						{likes}
+						{likesField}
 						{/* <div className="likes-field">
 							<i className="like far fa-heart fa-2x"></i>
 							<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}

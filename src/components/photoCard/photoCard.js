@@ -15,7 +15,22 @@ export default class PhotoCard extends Component {
 			  authorImageUrl = photo.user.profile_image.medium,
 			  publishDate = photo.created_at,
 			  likes = photo.likes,
-			  liked = photo.liked_by_user;
+			  liked = photo.liked_by_user,
+			  waitLike = photo.wait_like;
+
+		const likesField = waitLike ? 
+		(
+			<div className="likes-field">
+				<i className="spinner fas fa-spinner fa-pulse fa-2x"></i>
+			</div>
+		)
+		: (
+			<div className="likes-field">
+				<i className="like far fa-heart fa-2x"></i>
+					<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}
+						onClick={() => setLike(id, !liked)}></i>
+			</div>
+		);
 
 		return (
 			<div className='grid-item card'>
@@ -28,10 +43,10 @@ export default class PhotoCard extends Component {
 						<i className="eye far fa-eye fa-2x"></i>
 						<i className="eye-hover fas fa-eye fa-2x"></i>
 					</Link>
-					<i className="like far fa-heart fa-2x"></i>
+					{/* <i className="like far fa-heart fa-2x"></i>
 					<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}
-						onClick={() => setLike(id, !liked)}></i>
-					
+						onClick={() => setLike(id, !liked)}></i> */}
+					{likesField}
 
 					<div className="card-desc">
 						<div className="author">
