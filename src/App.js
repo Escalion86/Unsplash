@@ -16,8 +16,8 @@ let token = null;
 const unsplash = new Unsplash({ 
   accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
   secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
-  callbackUrl: "urn:ietf:wg:oauth:2.0:oob"
-  //callbackUrl: "http://picso.escalion.ru"
+  //allbackUrl: "urn:ietf:wg:oauth:2.0:oob"
+  callbackUrl: "http://picso.escalion.ru"
 });
 
 const authenticationUrl = unsplash.auth.getAuthenticationUrl([
@@ -26,11 +26,11 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([
 ]);
 
 //Проверяем токен и если он есть, то авторизируемся по нему напрямую
-token = localStorage.getItem("unsplash-authAC-code");
-if (token) {
-  unsplash.auth.setBearerToken(token);
+//token = localStorage.getItem("unsplash-authAC-code");
+//if (token) {
+//  unsplash.auth.setBearerToken(token);
 //если токена нет, то смотрим получен ли код авторизации и если код не получен, то получаем код переадресацией
-} else {
+//} else {
   const code = window.location.search.split('code=')[1];
   //const code = "WErxFguoBXoYFYvA9EiAFi27LuNwCxaQhEzryVXuZjU";
   if (!code) {
@@ -45,52 +45,11 @@ if (token) {
           unsplash.auth.setBearerToken(token);
         });
   }
-}
+//}
 
 //    window.location.assign(authenticationUrl);
 
-// if (localStorage.getItem("unsplash-authAC-code") === null) {
-//   const Unsplash = require('unsplash-js').default;
-//   const unsplash = new Unsplash({ 
-//     accessKey: "SB6Seq-YN5XjInu5sr9PEpxQbE5OmUYkpzigjwcg50k",
-//     secret: "b9tVIsp0cErEqtwEavBWGn61cX2_8F5NypHlaQRzFl0",
-//     callbackUrl: "unsplash.escalion.ru"
-//   });
-//   const authenticationUrl = unsplash.auth.getAuthenticationUrl([
-//     "public",
-//     "write_likes"
-//   ]);
-// }
-
-// const code = 'Sg1FeZLyyqk6_ogRy7AlaS0tAsPEoJIMOeH6IyDJ2hg';
-
-// unsplash.auth.userAuthentication(code)
-//   .then(res => res.json())
-//   .then(json =>
-//     {
-//       unsplash.auth.setBearerToken(json.access_token);
-//       console.log(json);
-//     })
-
-// Теперь можно сделать что-то от имени пользователя
-// Например, поставить лайк фотографии
-//unsplash.photos.likePhoto("kBJEJqWNtNY");
-// unsplash.photos.getPhoto('AHtS75VG5vQ')
-// .then(toJson)
-// .then(json => {
-//   console.log(json);
-// })
-//});
-
 export default class App extends Component {
-  // searchPhotos = (searchText) => {
-  //   this.setState({searchText}, () => this.loadPhotos(true));
-  // }
-
-  // searchPhotos = (searchText) => {
-  //   this.setSearchText(searchText);
-  //   this.loadPhotos();
-  // }
 
   // getPhoto(id) {
   //   unsplash.photos.getPhoto(id)//"pFqrYbhIAXs"
@@ -111,11 +70,6 @@ export default class App extends Component {
       });
     }
   }
-
-  // componentDidMount() {
-  //   console.log('App Did Mount')
-  //   this.loadPhotos(true);
-  // }
 
   setLike_func(id, status) {
     const doAction = (promise) => {
@@ -209,9 +163,7 @@ export default class App extends Component {
           } />  
           <Route exact path="/photo/:id" component={(props) => 
             <PhotoPage 
-              //unsplash={unsplash} 
               photo={this.getPhotoFromState(props.match.params.id)}
-              //id={props.match.params.id}
               setLike={this.setLike_func.bind(this)}
            />
           } />
@@ -233,7 +185,6 @@ const mapDispatchToProps = (dispatch) => {
     searchStart: (searchText, newLoad) => dispatch(searchStart(searchText, newLoad)),
     searchFinish: (photos, newLoad) => dispatch(searchFinish(photos, newLoad)),
     dispatch: (action) => dispatch(action)
-    //loadPhotos: () => dispatch(loadPhotos())
   }
 }
 
