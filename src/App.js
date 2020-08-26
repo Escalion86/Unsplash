@@ -148,45 +148,6 @@ export default class App extends Component {
     return res;
   }
 
-  // loadPhotos = (state, newLoad = false, count = 10) => {
-  //   const {searchText, pagesLoad, pagesLoading, photos} = state;
-
-  //   const doAction = (promise, newLoad) => {
-  //     this.setState({pagesLoading: true});
-
-  //     promise.then(toJson)
-  //     .then(json => {
-  //       console.log('loadedPhotos json: ');
-  //       console.log(json);
-  //       this.setState((state) => {
-  //         if (newLoad) {
-  //           return {
-  //             photos: this.formArrPhotos(json),
-  //             pagesLoad: 1,
-  //             pagesLoading: false
-  //           }
-  //         } else {
-  //           return {
-  //             photos: [...photos, ...this.formArrPhotos(json)],
-  //             pagesLoad: (pagesLoad + 1),
-  //             pagesLoading: false
-  //           }
-  //         }
-  //       });
-  //     });
-  //   }
-
-  //   if (!pagesLoading) {
-  //     console.log('loading page ' + (newLoad ? 1 : (pagesLoad + 1)));
-  //     console.log('search word: ' + searchText)
-  //     if (searchText && searchText !== '') {
-  //       doAction(unsplash.search.photos(searchText, newLoad ? 1 : (pagesLoad + 1), count), newLoad);    
-  //     } else {
-  //       doAction(unsplash.photos.listPhotos(newLoad ? 1 : (pagesLoad + 1), count, "latest"), newLoad);
-  //     }
-  //   }
-  // }
-
   componentDidMount() {
     this.loadPhotos();
   }
