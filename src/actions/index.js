@@ -1,8 +1,16 @@
-export const setLike = (id, liked) => {
+export const setLike = (id, liked, likes) => {
     return {
         type: 'SET_LIKE',
         id,
-        liked
+        liked,
+        likes
+    }
+}
+
+export const waitLike = (id) => {
+    return {
+        type: 'WAIT_LIKE',
+        id
     }
 }
 

@@ -75,3 +75,10 @@ header.sticky ul li a:hover {
 header.sticky ul li a.active {
   color: #6B3FC4;
 }
+
+header .back {
+  font-size: 20px;
+  font-weight: 800;
+  color: #6B3FC4;
+  text-decoration: none;
+}

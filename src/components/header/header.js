@@ -19,7 +19,7 @@ export default class Header extends Component {
 						newSearch={newSearch} />
 				} />  	
 				<Route path="/photo" component={() =>
-					<Link to="/">Back</Link>
+					<Link className="back" to="/">{'<-- Back'}</Link>
 				} /> 		
 			</header>
 		)

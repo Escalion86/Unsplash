@@ -11,7 +11,21 @@ const reducer = (state = initialState, action) => {
             console.log('SET_LIKE');
             const newPhotos = state.photos.map((photo) => {
                 if (action.id === photo.id) {
-                  return {...photo, liked_by_user: action.liked};
+                  return {...photo, liked_by_user: action.liked, likes: action.likes, wait_like: false};
+                }
+                return photo;
+            });
+            return {
+                ...state, 
+                photos: newPhotos,
+            }
+        }
+
+        case 'WAIT_LIKE': {
+            console.log('WAIT_LIKE');
+            const newPhotos = state.photos.map((photo) => {
+                if (action.id === photo.id) {
+                  return {...photo, wait_like: true};
                 }
                 return photo;
             });

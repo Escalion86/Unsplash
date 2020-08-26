@@ -5,9 +5,9 @@ import PhotoList from './components/photoList';
 import Header from './components/header';
 import PhotoPage from './components/photoPage';
 
-import { setLike, searchStart, searchFinish } from './actions';
+import { setLike, waitLike, searchStart, searchFinish } from './actions';
 
-import { Link, BrowserRouter as Router, Route, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import './App.css';
 
@@ -123,12 +123,12 @@ export default class App extends Component {
         .then(res => {      
           this.props.state.photos.forEach((photo) => {
             if (id === photo.id) {
-              this.props.dispatch(setLike(id, res.photo.liked_by_user));
+              this.props.dispatch(setLike(id, res.photo.liked_by_user, res.photo.likes));
             }
           });
       })
     }
-    
+    this.props.dispatch(waitLike(id))
     if (status) {
       console.log('promise to like');
       doAction(unsplash.photos.likePhoto(id));      
@@ -189,7 +189,7 @@ export default class App extends Component {
 
   render () {   
     console.log('App render');
-    const {state, setLike} = this.props;
+    const {state} = this.props;
 
     console.log(this.props);
     return(
@@ -228,7 +228,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setLike: (id, liked) => dispatch(setLike(id, liked)),
+    setLike: (id, liked, likes) => dispatch(setLike(id, liked, likes)),
+    waitLike: (id) => dispatch(waitLike(id)),
     searchStart: (searchText, newLoad) => dispatch(searchStart(searchText, newLoad)),
     searchFinish: (photos, newLoad) => dispatch(searchFinish(photos, newLoad)),
     dispatch: (action) => dispatch(action)

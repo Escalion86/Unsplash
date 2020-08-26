@@ -21,14 +21,27 @@ export default class PhotoPage extends Component {
 
 		const liked = photo.liked_by_user;
 
+		const likes = photo.wait_like ? 
+		(
+			<div className="likes-field">
+				<i className="spinner fas fa-spinner fa-pulse fa-2x"></i>
+				<div className="likes">{photo.likes}</div>
+			</div>
+		)
+		: (
+			<div className="likes-field">
+				<i className="like far fa-heart fa-2x"></i>
+				<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}
+					onClick={() => this.props.setLike(photo.id, !liked)}></i>
+				<div className="likes">{photo.likes}</div>
+			</div>
+		);
+
 		return (		
 			<section>
 				<div className="photo-page">
 					<img className="photo" src={photo.urls.regular} alt={'image: ' + photo.id} />
 					<div className="card-desc">
-						<i className="like far fa-heart fa-2x"></i>
-						<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}
-							onClick={() => this.props.setLike(photo.id, !liked)}></i>
 						<div className="author">
 							<h4>Автор:</h4>
 							<a href={photo.user.links.html}>
@@ -37,13 +50,20 @@ export default class PhotoPage extends Component {
 							</a>
 						</div>
 						<div>
+							<b>Описание: </b>
+							<i>{photo.description ? photo.description : photo.alt_description}</i>
+						</div>
+						<div>
 							<b>Опубликовано: </b>
 							<i>{photo.created_at.slice(0,10)}</i>
 						</div>
-						<div>
-							<b>Лайки: </b>
-							<i>{photo.likes}</i>
-						</div>
+						{likes}
+						{/* <div className="likes-field">
+							<i className="like far fa-heart fa-2x"></i>
+							<i className={`like-hover fas fa-heart fa-2x ${liked ? 'liked' : ''}`}
+								onClick={() => this.props.setLike(photo.id, !liked)}></i>
+							<div className="likes">{photo.likes}</div>
+						</div> */}
 					</div>
 				</div>
 			</section>

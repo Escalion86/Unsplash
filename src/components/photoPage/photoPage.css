@@ -1,15 +1,17 @@
 .photo-page {
   display: grid;
   max-width: 100%;
-  grid-template-columns: minmax(300px, 2fr) minmax(300px, 1fr);
+  
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 2vw;
+  grid-auto-flow: row;
 }
 
-.photo {
+.photo-page .photo {
   width: 100%;
 }
 
-.author-image {
+.photo-page .author-image {
   width: 128px;
   height: 128px;
   border-radius: 30px;
@@ -18,7 +20,8 @@
 }
 
 .photo-page .card-desc {
-  position: relative;
+  /* position: relative; */
+  padding: 0px 10px;
   color: #000;
   border: 1px solid #000;
 }
@@ -27,6 +30,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-bottom: 1px solid black;
+  padding-bottom: 10px;
+}
+
+.photo-page .card-desc > div {
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .photo-page .card-desc a {
@@ -42,37 +52,61 @@
   color: #6B3FC4;
 }
 
-.photo-page .like {
+.photo-page .likes-field {
+  position: relative;
+  min-height: 42px;
+}
+
+.photo-page .likes-field .like {
   opacity: 1;
 }
 
-.photo-page .like,
-.photo-page .like-hover {
+.photo-page .likes-field .like,
+.photo-page .likes-field .like-hover {
   position: absolute;
-  top: 10px;
-  width: 48px;
-  height: 48px;
+  top: 0px;
+  Left: 0px;
+  width: 32px;
+  height: 32px;
 }
 
-.photo-page .like, 
-.photo-page .like-hover {
-  right: 10px;
+.photo-page .likes-field .spinner {
+  position: absolute;
+  top: 0px;
+  Left: 0px;
+  width: 32px;
+  height: 32px;
+  color: #ff3366;
+}
+
+.photo-page .likes-field .likes {
+  position: absolute;
+  top: 0px;
+  Left: 40px;
+  color: #ff3366;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.photo-page .likes-field .like, 
+.photo-page .likes-field .like-hover {
+  /* right: 10px; */
   color: #ff3366;
   cursor: pointer;
 }
 
-.photo-page .like-hover {
+.photo-page .likes-field .like-hover {
   opacity: 0;
 }
 
-.photo-page .like-hover:hover {
+.photo-page .likes-field .like-hover:hover {
   opacity: 1;
 }
 
-.photo-page .like:hover {
+.photo-page .likes-field .like:hover {
   opacity: 0;
 }
 
-.photo-page .liked {
+.photo-page .likes-field .liked {
   opacity: 1;
 }
