@@ -8,9 +8,10 @@ import reducer from './reducers/index';
 const store = createStore( reducer );
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <UnsplashApp store={store} />
-  </React.StrictMode>,
+  // </React.StrictMode>
+  ,
   document.getElementById('root')
 );
 
